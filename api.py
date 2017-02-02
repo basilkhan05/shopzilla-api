@@ -33,7 +33,7 @@ class Product(Resource):
             cursor = mongo.db.product.find({}, {"_id": 0, "update_time": 0}).limit(10)
 
             for product in cursor:
-                print product
+                print(product)
                 product['url'] = APP_URL + url_for('products') + "/" + product.get('product_id')
                 data.append(product)
 
