@@ -15,7 +15,7 @@ class Product(Resource):
         data = []
 
         if product_id:
-            store_info = mongo.db.product.find_one({"id": product_id}, {"_id": 0})
+            store_info = mongo.db.product.find_one({"id": int(product_id)}, {"_id": 0})
             if store_info:
                 return jsonify({"status": "ok", "data": store_info})
             else:
@@ -47,7 +47,7 @@ class Product(Resource):
         else:
             product_id = data.get('id')
             if product_id:
-                if mongo.db.product.find_one({"id": product_id}):
+                if mongo.db.product.find_one({"id": int(product_id)}):
                     return {"response": "product already exists."}
                 else:
                     mongo.db.product.insert(data)
@@ -58,11 +58,11 @@ class Product(Resource):
 
     def put(self, product_id):
         data = request.get_json()
-        mongo.db.product.update({'id': product_id}, {'$set': data})
+        mongo.db.product.update({'id': int(product_id)}, {'$set': data})
         return redirect(url_for("products"))
 
     def delete(self, product_id):
-        mongo.db.product.remove({'product_id': product_id})
+        mongo.db.product.remove({'id': int(product_id)})
         return redirect(url_for("products"))
 
 
