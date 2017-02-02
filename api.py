@@ -24,7 +24,7 @@ class Product(Resource):
         elif store:
             cursor = mongo.db.product.find({"store": store}, {"_id": 0}).limit(10)
             for product in cursor:
-                product['url'] = APP_URL + url_for('products') + "/" + product.id.get('product_id')
+                product['url'] = APP_URL + url_for('products') + "/" + str(product.get('id'))
                 data.append(product)
 
             return jsonify({"store": store, "products": data})
