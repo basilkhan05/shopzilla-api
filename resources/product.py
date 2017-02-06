@@ -1,7 +1,11 @@
 from flask import Flask, jsonify, url_for, redirect, request
 from flask_pymongo import PyMongo
-from flask_restful import Api, Resource, reqparse
-from resources.index import Index 
+from flask_restful import Resource, reqparse
+
+app = Flask(__name__)
+app.config["MONGO_DBNAME"] = "shopzilla"
+mongo = PyMongo(app, config_prefix='MONGO')
+APP_URL = "http://127.0.0.1:5000"
 
 class Product(Resource):
     def get(self, product_id=None, store=None):
@@ -10,8 +14,6 @@ class Product(Resource):
         URLparser.add_argument('limit', type=str)
         args = URLparser.parse_args()
         limit = int(args['limit']) if args['limit'] else 10 
-
-        # print('----------------HELLO -------------' + parser.parse_args())
 
         if product_id:
             store_info = mongo.db.product.find_one({"id": int(product_id)}, {"_id": 0})
