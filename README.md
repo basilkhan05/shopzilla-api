@@ -1,13 +1,20 @@
 # Shopzilla-api
-REST API to store and retrieve data for multiple products from various shopify stores using Flask-RESTful
+REST API to store and retrieve data in a MongoDB Database for multiple products from various shopify stores using Flask-RESTful
 
 Requirements: 
+To use the API make sure you have python installed
 
-To use the API, install all dependencies:
+Install all required modules:
 ```
 $ cd shopzilla-api
 $ pip install -r requirements.txt
 ```
+
+Start the mongodb database
+```
+$ sudo service mongodb start
+```
+
 To run the API:
 ```
 $ python app.py
