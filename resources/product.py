@@ -8,7 +8,7 @@ mongo = PyMongo(app, config_prefix='MONGO')
 APP_URL = "http://127.0.0.1:5000"
 
 class Product(Resource):
-    def get(self, product_id=None, store=None):
+    def get(self, product_id=None, store=None, distinct=None):
         data = []
         URLparser = reqparse.RequestParser()
         URLparser.add_argument('limit', type=str)
@@ -29,6 +29,13 @@ class Product(Resource):
                 data.append(product)
 
             return jsonify({"store": store, "products": data})
+
+        elif distinct:
+            cursor = mongo.db.product.distinct( str(distinct) )
+            for store in cursor:
+                data.append(store)
+
+            return jsonify({str(distinct)+"s": data})
 
         else:
             cursor = mongo.db.product.find({}, {"_id": 0, "update_time": 0}).limit(limit)
