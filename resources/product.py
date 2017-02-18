@@ -12,8 +12,11 @@ class Product(Resource):
         data = []
         URLparser = reqparse.RequestParser()
         URLparser.add_argument('limit', type=str)
+        URLparser.add_argument('page', type=str)
         args = URLparser.parse_args()
         limit = int(args['limit']) if args['limit'] else 10 
+        page = int(args['page']) if args['page'] else 1
+
 
         if product_id:
             store_info = mongo.db.product.find_one({"id": int(product_id)}, {"_id": 0})
@@ -23,7 +26,7 @@ class Product(Resource):
                 return {"response": "no product found for {}".format(product_id)}
 
         elif store:
-            cursor = mongo.db.product.find({"store": store}, {"_id": 0}).limit(limit)
+            cursor = mongo.db.product.find({"store": store}, {"_id": 0}).skip(limit * (page-1)).limit(limit)
             for product in cursor:
                 product['url'] = APP_URL + url_for('products') + "/" + str(product.get('id'))
                 data.append(product)
@@ -38,7 +41,7 @@ class Product(Resource):
             return jsonify({str(distinct)+"s": data})
 
         else:
-            cursor = mongo.db.product.find({}, {"_id": 0, "update_time": 0}).limit(limit)
+            cursor = mongo.db.product.find({}, {"_id": 0, "update_time": 0}).skip(limit * (page-1)).limit(limit)
 
             for product in cursor:
                 print(product)
