@@ -5,7 +5,7 @@ from resources.index import Index
 from resources.product import Product
 
 app = Flask(__name__)
-app.config["MONGO_DBNAME"] = "shopzilla_test2"
+app.config["MONGO_DBNAME"] = "shopzilla"
 mongo = PyMongo(app, config_prefix='MONGO')
 
 api = Api(app)

@@ -59,7 +59,7 @@ class Product(Resource):
             product_id = data.get('id')
             if product_id:
                 if mongo.db.product.find_one({"id": int(product_id)}):
-                    return {"response": "product already exists."}
+                    mongo.db.product.update({'id': int(product_id)}, {'$set': data})
                 else:
                     mongo.db.product.insert(data)
             else:
